@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@remixicon/react": "^4.9.0",
     "@tailwindcss/vite": "^4.3.3",
     "date-fns": "^4.4.0",
     "gsap": "^3.15.0",
@@ -19,6 +20,7 @@
     "react-hook-form": "^7.88.0",
     "react-router-dom": "^7.18.4",
     "recharts": "^3.10.1",
+    "remixicon": "^4.9.1",
     "sonner": "^2.0.8",
     "tailwindcss": "^4.3.3"
   },
