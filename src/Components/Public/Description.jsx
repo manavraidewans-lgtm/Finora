@@ -1,11 +1,11 @@
-function Description ({Des}) {
+function Description({ Des, className = "" }) {
     return (
-        <>
-            <p className="text-[#949494] font-medium md:text-xl ">
-                {Des}
-            </p>
-        </>
-    )
+        <p
+            className={`text-[#949494] font-medium md:text-xl ${className}`}
+        >
+            {Des}
+        </p>
+    );
 }
 
-export default Description
+export default Description;
