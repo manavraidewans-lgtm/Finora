@@ -1,157 +1,533 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
+
 
 function Navbar({ ClassName = "" }) {
 
-    const [menuOpen, setMenuOpen] = useState(false);
-    const [profileOpen, setProfileOpen] = useState(false);
-
     const navigate = useNavigate();
 
-    const closeMenu = () => {
-        setMenuOpen(false);
-    };
 
-    const toggleProfile = () => {
-        setProfileOpen(!profileOpen);
-        setMenuOpen(false);
-    };
+    // ================= MENU =================
 
-    const closeProfile = () => {
+    const [menuOpen, setMenuOpen] = useState(false);
+
+    const [profileOpen, setProfileOpen] = useState(false);
+
+    const [popup, setPopup] = useState(null);
+
+
+    // ================= PROFILE =================
+
+    const [profile, setProfile] = useState(() => {
+
+        const savedProfile =
+            localStorage.getItem("finoraProfile");
+
+
+        if (savedProfile) {
+
+            try {
+
+                return JSON.parse(savedProfile);
+
+            } catch (error) {
+
+                console.error(
+                    "Profile loading error:",
+                    error
+                );
+
+            }
+
+        }
+
+
+        return {
+            name: "Manav Rai Dewan",
+            email: "manav.dewan@email.com",
+            phone: "+91 98765 43210",
+            timezone: "Asia/Kolkata",
+            currency: "INR (₹)",
+            language: "English",
+            image: "/profile.jpg",
+        };
+
+    });
+
+
+    // ================= PROFILE SYNC =================
+
+    useEffect(() => {
+
+        const updateProfile = () => {
+
+            const savedProfile =
+                localStorage.getItem("finoraProfile");
+
+
+            if (!savedProfile) return;
+
+
+            try {
+
+                setProfile(
+                    JSON.parse(savedProfile)
+                );
+
+            } catch (error) {
+
+                console.error(
+                    "Navbar profile error:",
+                    error
+                );
+
+            }
+
+        };
+
+
+        window.addEventListener(
+            "profileUpdated",
+            updateProfile
+        );
+
+
+        window.addEventListener(
+            "storage",
+            updateProfile
+        );
+
+
+        return () => {
+
+            window.removeEventListener(
+                "profileUpdated",
+                updateProfile
+            );
+
+
+            window.removeEventListener(
+                "storage",
+                updateProfile
+            );
+
+        };
+
+    }, []);
+
+
+    // ================= NAVIGATION =================
+
+    const goTo = (path) => {
+
+        setMenuOpen(false);
         setProfileOpen(false);
+
+        navigate(path);
+
     };
+
+
+    // ================= PROFILE =================
+
+    const handleProfileClick = () => {
+
+        setProfileOpen((prev) => !prev);
+
+        setPopup(null);
+
+    };
+
+
+    // ================= PRIVACY =================
+
+    const openPrivacy = () => {
+
+        setProfileOpen(false);
+        setPopup("privacy");
+
+    };
+
+
+    // ================= SECURITY =================
+
+    const openSecurity = () => {
+
+        setProfileOpen(false);
+        setPopup("security");
+
+    };
+
+
+    // ================= LOGOUT =================
 
     const handleLogout = () => {
+
         setProfileOpen(false);
         setMenuOpen(false);
 
+        localStorage.removeItem("finoraLoggedIn");
+
         navigate("/");
+
     };
 
+
+    // ================= CLOSE MENU =================
+
+    const closeMenu = () => {
+
+        setMenuOpen(false);
+
+    };
+
+
+    // ================= CLOSE POPUP =================
+
+    const closePopup = () => {
+
+        setPopup(null);
+
+    };
+
+
     return (
+
         <>
-            {/* ================================================= */}
-            {/* DESKTOP SIDEBAR */}
-            {/* ================================================= */}
+
+            {/* =====================================================
+                DESKTOP SIDEBAR
+            ===================================================== */}
 
             <aside
                 className={`
-                    hidden
-                    md:flex
                     fixed
                     left-0
                     top-0
                     z-50
+                    hidden
                     h-screen
-                    w-[240px]
+                    w-64
                     flex-col
-                    bg-[#0d1b2a]
-                    text-white
+                    border-r
+                    border-[#203044]
+                    bg-[#101e2d]
+                    lg:flex
                     ${ClassName}
                 `}
             >
 
-                {/* Logo */}
-                <div className="flex h-[80px] shrink-0 items-center px-8">
+                {/* =================================================
+                    LOGO
+                ================================================= */}
 
-                    <NavLink
-                        to="/dashboard"
-                        className="flex items-center gap-3"
+                <div className="flex h-[12vh] items-center px-7">
+
+                    <button
+                        type="button"
+                        onClick={() => goTo("/dashboard")}
+                        className="flex items-center gap-2 text-xl font-bold tracking-tight text-white"
                     >
 
-                        <div className="grid grid-cols-2 gap-1">
-
-                            <div className="h-3 w-3 rounded-[3px] bg-[#ff7f7f]"></div>
-
-                            <div className="h-3 w-3 rounded-[3px] bg-[#d98270]"></div>
-
-                            <div className="h-3 w-3 rounded-[3px] bg-[#f08b83]"></div>
-
-                            <div className="h-3 w-3 rounded-[3px] bg-[#e6a08c]"></div>
-
-                        </div>
-
-                        <span className="text-xl font-bold">
-                            Munivo
+                        <span>
+                            Finora
                         </span>
 
-                    </NavLink>
+                        <span className="text-lg">
+                            🍀
+                        </span>
+
+                    </button>
 
                 </div>
 
 
-                {/* Navigation */}
-                <nav className="flex flex-1 flex-col gap-2 px-4 py-5">
+                {/* =================================================
+                    NAVIGATION
+                ================================================= */}
+
+                <nav className="flex flex-1 flex-col px-4">
 
                     <NavItem
-                        Icon="ri-home-5-line"
-                        Title="Dashboard"
-                        Link="/dashboard"
+                        to="/dashboard"
+                        icon="ri-dashboard-line"
+                        label="Dashboard"
                     />
 
                     <NavItem
-                        Icon="ri-arrow-left-right-line"
-                        Title="Transactions"
-                        Link="/dashboard/transactions"
+                        to="/dashboard/transactions"
+                        icon="ri-exchange-dollar-line"
+                        label="Transactions"
                     />
 
                     <NavItem
-                        Icon="ri-focus-3-line"
-                        Title="Budgets"
-                        Link="/dashboard/budgets"
+                        to="/dashboard/budgets"
+                        icon="ri-wallet-3-line"
+                        label="Budgets"
                     />
 
                     <NavItem
-                        Icon="ri-flag-line"
-                        Title="Goals"
-                        Link="/dashboard/goals"
+                        to="/dashboard/goals"
+                        icon="ri-focus-3-line"
+                        label="Goals"
                     />
 
                     <NavItem
-                        Icon="ri-bar-chart-line"
-                        Title="Analytics"
-                        Link="/dashboard/analytics"
+                        to="/dashboard/analytics"
+                        icon="ri-bar-chart-box-line"
+                        label="Analytics"
                     />
 
                     <NavItem
-                        Icon="ri-calendar-line"
-                        Title="Recurring"
-                        Link="/dashboard/recurring"
+                        to="/dashboard/recurring"
+                        icon="ri-repeat-line"
+                        label="Recurring"
                     />
 
                     <NavItem
-                        Icon="ri-file-chart-line"
-                        Title="Reports"
-                        Link="/dashboard/reports"
-                    />
-
-                    <NavItem
-                        Icon="ri-settings-3-line"
-                        Title="Settings"
-                        Link="/dashboard/settings"
+                        to="/dashboard/reports"
+                        icon="ri-file-chart-line"
+                        label="Reports"
                     />
 
                 </nav>
 
 
-                {/* Bottom Message */}
-                <div className="shrink-0 p-4">
+                {/* =================================================
+                    BOTTOM SECTION
+                ================================================= */}
 
-                    <div className="rounded-xl bg-[#1b2d42] p-5">
+                <div className="border-t border-[#203044] p-4">
 
-                        <div className="mb-4 text-2xl">
-                            🌱
-                        </div>
+                    {/* ================= SETTINGS ================= */}
 
-                        <p className="text-sm leading-6 text-white">
-                            Small steps
-                            <br />
-                            today, big dreams
-                            <br />
-                            tomorrow.
-                        </p>
+                    <button
+                        type="button"
+                        onClick={() =>
+                            goTo("/dashboard/settings")
+                        }
+                        className="
+                            flex
+                            w-full
+                            items-center
+                            gap-3
+                            rounded-xl
+                            px-3
+                            py-3
+                            text-left
+                            text-sm
+                            font-medium
+                            text-[#c8d4e3]
+                            transition
+                            hover:bg-[#1b2c42]
+                            hover:text-white
+                        "
+                    >
 
-                        <div className="mt-4 h-[3px] w-8 rounded-full bg-[#f6c453]"></div>
+                        <i className="ri-settings-3-line text-xl"></i>
+
+                        <span>
+                            Settings
+                        </span>
+
+                    </button>
+
+
+                    {/* ================= PROFILE ================= */}
+
+                    <div className="relative mt-2">
+
+                        <button
+                            type="button"
+                            onClick={handleProfileClick}
+                            className="
+                                flex
+                                w-full
+                                items-center
+                                gap-3
+                                rounded-xl
+                                p-2
+                                text-left
+                                transition
+                                hover:bg-[#1b2c42]
+                            "
+                        >
+
+                            {/* PROFILE IMAGE */}
+
+                            <div className="
+                                h-10
+                                w-10
+                                shrink-0
+                                overflow-hidden
+                                rounded-full
+                                border
+                                border-[#34485e]
+                                bg-[#24364b]
+                            ">
+
+                                <img
+                                    src={
+                                        profile?.image ||
+                                        "/profile.jpg"
+                                    }
+                                    alt="Profile"
+                                    className="h-full w-full object-cover"
+                                />
+
+                            </div>
+
+
+                            {/* PROFILE INFO */}
+
+                            <div className="min-w-0 flex-1">
+
+                                <p className="
+                                    truncate
+                                    text-sm
+                                    font-semibold
+                                    text-white
+                                ">
+                                    {profile?.name ||
+                                        "Manav Rai Dewan"}
+                                </p>
+
+                                <p className="
+                                    truncate
+                                    text-xs
+                                    text-[#91a3b8]
+                                ">
+                                    {profile?.email ||
+                                        "manav.dewan@email.com"}
+                                </p>
+
+                            </div>
+
+
+                            <i
+                                className={`
+                                    ri-arrow-up-s-line
+                                    shrink-0
+                                    text-lg
+                                    text-[#9eb0c3]
+                                    transition-transform
+                                    ${
+                                        profileOpen
+                                            ? "rotate-180"
+                                            : ""
+                                    }
+                                `}
+                            ></i>
+
+                        </button>
+
+
+                        {/* =================================================
+                            DESKTOP PROFILE MENU
+                        ================================================= */}
+
+                        {profileOpen && (
+
+                            <div className="
+                                absolute
+                                bottom-[calc(100%+10px)]
+                                left-0
+                                z-[60]
+                                w-full
+                                min-w-[220px]
+                                rounded-2xl
+                                border
+                                border-[#2b4056]
+                                bg-[#16283b]
+                                p-2
+                                shadow-[0_18px_45px_rgba(0,0,0,0.30)]
+                            ">
+
+                                {/* PROFILE */}
+
+                                <ProfileMenuItem
+                                    icon="ri-user-line"
+                                    label="Profile"
+                                    onClick={() =>
+                                        goTo(
+                                            "/dashboard/settings"
+                                        )
+                                    }
+                                />
+
+
+                                {/* SETTINGS */}
+
+                                <ProfileMenuItem
+                                    icon="ri-settings-3-line"
+                                    label="Settings"
+                                    onClick={() =>
+                                        goTo(
+                                            "/dashboard/settings"
+                                        )
+                                    }
+                                />
+
+
+                                {/* PRIVACY */}
+
+                                <ProfileMenuItem
+                                    icon="ri-shield-check-line"
+                                    label="Privacy"
+                                    onClick={openPrivacy}
+                                />
+
+
+                                {/* SECURITY */}
+
+                                <ProfileMenuItem
+                                    icon="ri-lock-line"
+                                    label="Security"
+                                    onClick={openSecurity}
+                                />
+
+
+                                <div className="my-1 h-px bg-[#2b4056]"></div>
+
+
+                                {/* LOGOUT */}
+
+                                <button
+                                    type="button"
+                                    onClick={handleLogout}
+                                    className="
+                                        flex
+                                        w-full
+                                        items-center
+                                        gap-3
+                                        rounded-xl
+                                        px-3
+                                        py-3
+                                        text-left
+                                        transition
+                                        hover:bg-[#2b2023]
+                                    "
+                                >
+
+                                    <i className="
+                                        ri-logout-box-r-line
+                                        text-lg
+                                        text-[#ff8d8d]
+                                    "></i>
+
+                                    <span className="
+                                        text-sm
+                                        font-medium
+                                        text-[#ff9b9b]
+                                    ">
+                                        Logout
+                                    </span>
+
+                                </button>
+
+                            </div>
+
+                        )}
 
                     </div>
 
@@ -160,152 +536,112 @@ function Navbar({ ClassName = "" }) {
             </aside>
 
 
-            {/* ================================================= */}
-            {/* MOBILE NAVBAR */}
-            {/* ================================================= */}
+            {/* =====================================================
+                MOBILE / TABLET NAVBAR
+            ===================================================== */}
 
             <header
-                className="
-                    relative
+                className={`
+                    fixed
+                    left-0
+                    top-0
                     z-50
                     flex
-                    h-[70px]
+                    h-[8vh]
                     w-full
                     items-center
                     justify-between
                     border-b
-                    border-[#e5e1dc]
-                    bg-[#f7f4ef]
-                    px-5
-                    md:hidden
-                "
+                    border-[#203044]
+                    bg-[#101e2d]
+                    px-4
+                    md:px-6
+                    lg:hidden
+                    ${ClassName}
+                `}
             >
 
-                {/* Logo */}
-                <NavLink
-                    to="/dashboard"
-                    onClick={() => {
-                        closeMenu();
-                        closeProfile();
-                    }}
-                    className="flex items-center gap-3"
+                {/* ================= LOGO ================= */}
+
+                <button
+                    type="button"
+                    onClick={() =>
+                        goTo("/dashboard")
+                    }
+                    className="
+                        text-lg
+                        font-bold
+                        tracking-tight
+                        text-white
+                    "
                 >
 
-                    <div className="grid grid-cols-2 gap-1">
+                    Finora
 
-                        <div className="h-3 w-3 rounded-[3px] bg-[#ff7f7f]"></div>
-
-                        <div className="h-3 w-3 rounded-[3px] bg-[#d98270]"></div>
-
-                        <div className="h-3 w-3 rounded-[3px] bg-[#f08b83]"></div>
-
-                        <div className="h-3 w-3 rounded-[3px] bg-[#e6a08c]"></div>
-
-                    </div>
-
-                    <span className="text-lg font-bold text-[#172033]">
-                        Munivo
+                    <span className="ml-1">
+                        🍀
                     </span>
 
-                </NavLink>
+                </button>
 
 
-                {/* ================================================= */}
-                {/* RIGHT SIDE */}
-                {/* ================================================= */}
+                {/* ================= RIGHT ================= */}
 
                 <div className="flex items-center gap-2">
 
-                    {/* Notification */}
-                    <button
-                        type="button"
-                        className="
-                            relative
-                            flex
-                            h-10
-                            w-10
-                            items-center
-                            justify-center
-                            rounded-lg
-                            text-xl
-                            text-[#172033]
-                            hover:bg-[#ebe7e1]
-                        "
-                    >
-
-                        <i className="ri-notification-3-line"></i>
-
-                        <span
-                            className="
-                                absolute
-                                right-2
-                                top-2
-                                h-2
-                                w-2
-                                rounded-full
-                                bg-red-500
-                            "
-                        ></span>
-
-                    </button>
-
-
-                    {/* ================================================= */}
-                    {/* USER / PROFILE BUTTON */}
-                    {/* ================================================= */}
+                    {/* PROFILE */}
 
                     <button
                         type="button"
-                        onClick={toggleProfile}
+                        onClick={handleProfileClick}
                         className="
-                            flex
                             h-10
                             w-10
-                            items-center
-                            justify-center
-                            rounded-lg
-                            text-xl
-                            text-[#172033]
-                            hover:bg-[#ebe7e1]
+                            overflow-hidden
+                            rounded-full
+                            border
+                            border-[#34485e]
+                            bg-[#24364b]
                         "
                     >
 
-                        <i
-                            className={
-                                profileOpen
-                                    ? "ri-close-line"
-                                    : "ri-user-3-line"
+                        <img
+                            src={
+                                profile?.image ||
+                                "/profile.jpg"
                             }
-                        ></i>
+                            alt="Profile"
+                            className="h-full w-full object-cover"
+                        />
 
                     </button>
 
 
-                    {/* Hamburger */}
+                    {/* MENU */}
+
                     <button
                         type="button"
-                        onClick={() => {
-                            setMenuOpen(!menuOpen);
-                            setProfileOpen(false);
-                        }}
+                        onClick={() =>
+                            setMenuOpen((prev) => !prev)
+                        }
                         className="
                             flex
                             h-10
                             w-10
                             items-center
                             justify-center
-                            rounded-lg
-                            text-2xl
-                            text-[#172033]
-                            hover:bg-[#ebe7e1]
+                            rounded-xl
+                            text-[#d5dfeb]
+                            transition
+                            hover:bg-[#1b2c42]
                         "
                     >
 
                         <i
                             className={
                                 menuOpen
-                                    ? "ri-close-line"
-                                    : "ri-menu-line"
+                                    ? "ri-close-line text-2xl"
+                                    : "ri-menu-line text-2xl"
                             }
                         ></i>
 
@@ -313,445 +649,766 @@ function Navbar({ ClassName = "" }) {
 
                 </div>
 
-            </header>
+
+                {/* =================================================
+                    MOBILE PROFILE POPUP
+                ================================================= */}
+
+                {profileOpen && (
+
+                    <div className="
+                        absolute
+                        right-4
+                        top-[calc(100%+8px)]
+                        z-[60]
+                        w-60
+                        rounded-2xl
+                        border
+                        border-[#2b4056]
+                        bg-[#16283b]
+                        p-3
+                        shadow-[0_18px_45px_rgba(0,0,0,0.30)]
+                        md:right-6
+                    ">
+
+                        {/* USER */}
+
+                        <div className="
+                            flex
+                            items-center
+                            gap-3
+                            border-b
+                            border-[#2b4056]
+                            pb-3
+                        ">
+
+                            <div className="
+                                h-11
+                                w-11
+                                shrink-0
+                                overflow-hidden
+                                rounded-full
+                                border
+                                border-[#34485e]
+                            ">
+
+                                <img
+                                    src={
+                                        profile?.image ||
+                                        "/profile.jpg"
+                                    }
+                                    alt="Profile"
+                                    className="h-full w-full object-cover"
+                                />
+
+                            </div>
 
 
-            {/* ================================================= */}
-            {/* PROFILE MODAL */}
-            {/* ================================================= */}
+                            <div className="min-w-0">
 
-            {profileOpen && (
-                <>
-                    {/* Overlay */}
-                    <div
-                        onClick={closeProfile}
-                        className="
-                            fixed
-                            inset-0
-                            z-40
-                            bg-black/20
-                            md:hidden
-                        "
-                    ></div>
+                                <p className="
+                                    truncate
+                                    text-sm
+                                    font-semibold
+                                    text-white
+                                ">
+                                    {profile?.name ||
+                                        "Manav Rai Dewan"}
+                                </p>
+
+                                <p className="
+                                    truncate
+                                    text-xs
+                                    text-[#91a3b8]
+                                ">
+                                    {profile?.email ||
+                                        "manav.dewan@email.com"}
+                                </p>
+
+                            </div>
+
+                        </div>
 
 
-                    {/* Profile Menu */}
-                    <div
-                        className="
-                            fixed
-                            right-5
-                            top-[78px]
-                            z-50
-                            w-[260px]
-                            rounded-2xl
-                            border
-                            border-[#e5e1dc]
-                            bg-[#f7f4ef]
-                            p-3
-                            shadow-xl
-                            md:hidden
-                        "
-                    >
+                        {/* PROFILE */}
 
-                        {/* User Information */}
-                        <div
+                        <ProfileMenuItem
+                            icon="ri-user-line"
+                            label="Profile"
+                            onClick={() =>
+                                goTo(
+                                    "/dashboard/settings"
+                                )
+                            }
+                        />
+
+
+                        {/* SETTINGS */}
+
+                        <ProfileMenuItem
+                            icon="ri-settings-3-line"
+                            label="Settings"
+                            onClick={() =>
+                                goTo(
+                                    "/dashboard/settings"
+                                )
+                            }
+                        />
+
+
+                        {/* PRIVACY */}
+
+                        <ProfileMenuItem
+                            icon="ri-shield-check-line"
+                            label="Privacy"
+                            onClick={openPrivacy}
+                        />
+
+
+                        {/* SECURITY */}
+
+                        <ProfileMenuItem
+                            icon="ri-lock-line"
+                            label="Security"
+                            onClick={openSecurity}
+                        />
+
+
+                        <div className="my-1 h-px bg-[#2b4056]"></div>
+
+
+                        {/* LOGOUT */}
+
+                        <button
+                            type="button"
+                            onClick={handleLogout}
                             className="
                                 flex
+                                w-full
                                 items-center
                                 gap-3
-                                border-b
-                                border-[#e5e1dc]
+                                rounded-xl
                                 px-3
-                                pb-4
+                                py-3
+                                text-left
+                                transition
+                                hover:bg-[#2b2023]
                             "
                         >
 
-                            {/* Avatar */}
-                            <div
-                                className="
+                            <i className="
+                                ri-logout-box-r-line
+                                text-lg
+                                text-[#ff8d8d]
+                            "></i>
+
+                            <span className="
+                                text-sm
+                                font-medium
+                                text-[#ff9b9b]
+                            ">
+                                Logout
+                            </span>
+
+                        </button>
+
+                    </div>
+
+                )}
+
+            </header>
+
+
+            {/* =====================================================
+                MOBILE / TABLET MENU
+            ===================================================== */}
+
+            {menuOpen && (
+
+                <div className="
+                    fixed
+                    inset-x-0
+                    top-[8vh]
+                    z-40
+                    max-h-[92vh]
+                    overflow-y-auto
+                    border-b
+                    border-[#203044]
+                    bg-[#101e2d]
+                    p-4
+                    shadow-[0_15px_35px_rgba(0,0,0,0.25)]
+                    lg:hidden
+                ">
+
+                    <nav className="flex flex-col gap-1">
+
+                        <MobileNavItem
+                            to="/dashboard"
+                            icon="ri-dashboard-line"
+                            label="Dashboard"
+                            onClick={closeMenu}
+                        />
+
+                        <MobileNavItem
+                            to="/dashboard/transactions"
+                            icon="ri-exchange-dollar-line"
+                            label="Transactions"
+                            onClick={closeMenu}
+                        />
+
+                        <MobileNavItem
+                            to="/dashboard/budgets"
+                            icon="ri-wallet-3-line"
+                            label="Budgets"
+                            onClick={closeMenu}
+                        />
+
+                        <MobileNavItem
+                            to="/dashboard/goals"
+                            icon="ri-focus-3-line"
+                            label="Goals"
+                            onClick={closeMenu}
+                        />
+
+                        <MobileNavItem
+                            to="/dashboard/analytics"
+                            icon="ri-bar-chart-box-line"
+                            label="Analytics"
+                            onClick={closeMenu}
+                        />
+
+                        <MobileNavItem
+                            to="/dashboard/recurring"
+                            icon="ri-repeat-line"
+                            label="Recurring"
+                            onClick={closeMenu}
+                        />
+
+                        <MobileNavItem
+                            to="/dashboard/reports"
+                            icon="ri-file-chart-line"
+                            label="Reports"
+                            onClick={closeMenu}
+                        />
+
+
+                        <div className="my-2 h-px bg-[#203044]"></div>
+
+
+                        <MobileNavItem
+                            to="/dashboard/settings"
+                            icon="ri-settings-3-line"
+                            label="Settings"
+                            onClick={closeMenu}
+                        />
+
+                    </nav>
+
+                </div>
+
+            )}
+
+
+            {/* =====================================================
+                PRIVACY / SECURITY MODAL
+            ===================================================== */}
+
+            {popup && (
+
+                <div
+                    className="
+                        fixed
+                        inset-0
+                        z-[100]
+                        flex
+                        items-center
+                        justify-center
+                        bg-black/40
+                        px-4
+                    "
+                    onClick={closePopup}
+                >
+
+                    <div
+                        className="
+                            w-full
+                            max-w-md
+                            rounded-2xl
+                            border
+                            border-[#e4ded7]
+                            bg-[#f8f5f0]
+                            p-6
+                            shadow-[0_20px_60px_rgba(0,0,0,0.25)]
+                        "
+                        onClick={(e) =>
+                            e.stopPropagation()
+                        }
+                    >
+
+                        {/* HEADER */}
+
+                        <div className="flex items-start justify-between">
+
+                            <div className="flex items-center gap-3">
+
+                                <div className="
                                     flex
                                     h-11
                                     w-11
                                     items-center
                                     justify-center
-                                    rounded-full
-                                    bg-[#203854]
-                                    text-lg
-                                    text-white
-                                "
-                            >
-                                <i className="ri-user-3-line"></i>
+                                    rounded-xl
+                                    bg-[#ebe5de]
+                                ">
+
+                                    <i
+                                        className={
+                                            popup === "privacy"
+                                                ? "ri-shield-check-line text-xl text-[#896b57]"
+                                                : "ri-lock-line text-xl text-[#896b57]"
+                                        }
+                                    ></i>
+
+                                </div>
+
+                                <div>
+
+                                    <h2 className="
+                                        text-lg
+                                        font-semibold
+                                        text-[#3f4345]
+                                    ">
+
+                                        {popup === "privacy"
+                                            ? "Privacy"
+                                            : "Security"}
+
+                                    </h2>
+
+                                    <p className="
+                                        text-xs
+                                        text-[#8a918f]
+                                    ">
+
+                                        {popup === "privacy"
+                                            ? "Manage your privacy preferences."
+                                            : "Keep your Finora account secure."}
+
+                                    </p>
+
+                                </div>
+
                             </div>
 
 
-                            {/* User Details */}
-                            <div>
+                            <button
+                                type="button"
+                                onClick={closePopup}
+                                className="
+                                    flex
+                                    h-9
+                                    w-9
+                                    items-center
+                                    justify-center
+                                    rounded-lg
+                                    text-[#68747c]
+                                    transition
+                                    hover:bg-[#ebe5de]
+                                "
+                            >
 
-                                <p className="text-sm font-semibold text-[#172033]">
-                                    User
-                                </p>
+                                <i className="ri-close-line text-xl"></i>
 
-                                <p className="text-xs text-[#6b7280]">
-                                    user@munivo.com
-                                </p>
+                            </button>
+
+                        </div>
+
+
+                        {/* CONTENT */}
+
+                        {popup === "privacy" ? (
+
+                            <div className="mt-6 space-y-3">
+
+                                <div className="
+                                    rounded-xl
+                                    border
+                                    border-[#e7e3de]
+                                    bg-white
+                                    p-4
+                                ">
+
+                                    <div className="
+                                        flex
+                                        items-center
+                                        justify-between
+                                    ">
+
+                                        <div>
+
+                                            <p className="
+                                                text-sm
+                                                font-semibold
+                                                text-[#3f4345]
+                                            ">
+                                                Personal Information
+                                            </p>
+
+                                            <p className="
+                                                mt-1
+                                                text-xs
+                                                text-[#8a918f]
+                                            ">
+                                                Your profile information is stored locally.
+                                            </p>
+
+                                        </div>
+
+                                        <i className="
+                                            ri-user-line
+                                            text-lg
+                                            text-[#896b57]
+                                        "></i>
+
+                                    </div>
+
+                                </div>
+
+
+                                <div className="
+                                    rounded-xl
+                                    border
+                                    border-[#e7e3de]
+                                    bg-white
+                                    p-4
+                                ">
+
+                                    <div className="
+                                        flex
+                                        items-center
+                                        justify-between
+                                    ">
+
+                                        <div>
+
+                                            <p className="
+                                                text-sm
+                                                font-semibold
+                                                text-[#3f4345]
+                                            ">
+                                                Data Storage
+                                            </p>
+
+                                            <p className="
+                                                mt-1
+                                                text-xs
+                                                text-[#8a918f]
+                                            ">
+                                                Finora currently uses local browser storage.
+                                            </p>
+
+                                        </div>
+
+                                        <i className="
+                                            ri-database-2-line
+                                            text-lg
+                                            text-[#896b57]
+                                        "></i>
+
+                                    </div>
+
+                                </div>
 
                             </div>
 
-                        </div>
+                        ) : (
 
+                            <div className="mt-6 space-y-3">
 
-                        {/* Options */}
-                        <div className="mt-2 flex flex-col gap-1">
-
-                            {/* Profile */}
-                            <button
-                                type="button"
-                                onClick={closeProfile}
-                                className="
-                                    flex
-                                    w-full
-                                    items-center
-                                    gap-3
+                                <div className="
                                     rounded-xl
-                                    px-3
-                                    py-3
-                                    text-left
-                                    text-sm
-                                    text-[#172033]
-                                    transition
-                                    hover:bg-[#ebe7e1]
-                                "
-                            >
+                                    border
+                                    border-[#e7e3de]
+                                    bg-white
+                                    p-4
+                                ">
 
-                                <i className="ri-user-line text-lg text-[#896b57]"></i>
+                                    <div className="
+                                        flex
+                                        items-center
+                                        justify-between
+                                    ">
 
-                                <span>
-                                    Profile
-                                </span>
+                                        <div>
 
-                            </button>
+                                            <p className="
+                                                text-sm
+                                                font-semibold
+                                                text-[#3f4345]
+                                            ">
+                                                Account Security
+                                            </p>
+
+                                            <p className="
+                                                mt-1
+                                                text-xs
+                                                text-[#8a918f]
+                                            ">
+                                                Your account settings are protected.
+                                            </p>
+
+                                        </div>
+
+                                        <i className="
+                                            ri-shield-check-line
+                                            text-lg
+                                            text-[#896b57]
+                                        "></i>
+
+                                    </div>
+
+                                </div>
 
 
-                            {/* Settings */}
-                            <button
-                                type="button"
-                                onClick={() => {
-                                    closeProfile();
-                                    navigate("/dashboard/settings");
-                                }}
-                                className="
-                                    flex
-                                    w-full
-                                    items-center
-                                    gap-3
+                                <div className="
                                     rounded-xl
-                                    px-3
-                                    py-3
-                                    text-left
-                                    text-sm
-                                    text-[#172033]
-                                    transition
-                                    hover:bg-[#ebe7e1]
-                                "
-                            >
+                                    border
+                                    border-[#e7e3de]
+                                    bg-white
+                                    p-4
+                                ">
 
-                                <i className="ri-settings-3-line text-lg text-[#896b57]"></i>
+                                    <div className="
+                                        flex
+                                        items-center
+                                        justify-between
+                                    ">
 
-                                <span>
-                                    Settings
-                                </span>
+                                        <div>
 
-                            </button>
+                                            <p className="
+                                                text-sm
+                                                font-semibold
+                                                text-[#3f4345]
+                                            ">
+                                                Password
+                                            </p>
 
+                                            <p className="
+                                                mt-1
+                                                text-xs
+                                                text-[#8a918f]
+                                            ">
+                                                Password management can be added here later.
+                                            </p>
 
-                            {/* Privacy */}
-                            <button
-                                type="button"
-                                onClick={closeProfile}
-                                className="
-                                    flex
-                                    w-full
-                                    items-center
-                                    gap-3
-                                    rounded-xl
-                                    px-3
-                                    py-3
-                                    text-left
-                                    text-sm
-                                    text-[#172033]
-                                    transition
-                                    hover:bg-[#ebe7e1]
-                                "
-                            >
+                                        </div>
 
-                                <i className="ri-shield-check-line text-lg text-[#896b57]"></i>
+                                        <i className="
+                                            ri-key-2-line
+                                            text-lg
+                                            text-[#896b57]
+                                        "></i>
 
-                                <span>
-                                    Privacy
-                                </span>
+                                    </div>
 
-                            </button>
+                                </div>
 
+                            </div>
 
-                            {/* Divider */}
-                            <div className="my-1 h-px w-full bg-[#e5e1dc]"></div>
+                        )}
 
 
-                            {/* Logout */}
-                            <button
-                                type="button"
-                                onClick={handleLogout}
-                                className="
-                                    flex
-                                    w-full
-                                    items-center
-                                    gap-3
-                                    rounded-xl
-                                    px-3
-                                    py-3
-                                    text-left
-                                    text-sm
-                                    font-medium
-                                    text-red-500
-                                    transition
-                                    hover:bg-red-50
-                                "
-                            >
+                        {/* CLOSE */}
 
-                                <i className="ri-logout-box-r-line text-lg"></i>
-
-                                <span>
-                                    Logout
-                                </span>
-
-                            </button>
-
-                        </div>
+                        <button
+                            type="button"
+                            onClick={closePopup}
+                            className="
+                                mt-6
+                                w-full
+                                rounded-xl
+                                bg-[#896b57]
+                                px-4
+                                py-3
+                                text-sm
+                                font-medium
+                                text-white
+                                transition
+                                hover:bg-[#795d4b]
+                            "
+                        >
+                            Close
+                        </button>
 
                     </div>
-                </>
-            )}
-
-
-            {/* ================================================= */}
-            {/* MOBILE MENU */}
-            {/* ================================================= */}
-
-            {menuOpen && (
-                <>
-                    {/* Overlay */}
-                    <div
-                        onClick={closeMenu}
-                        className="
-                            fixed
-                            inset-0
-                            z-40
-                            bg-black/20
-                            md:hidden
-                        "
-                    ></div>
-
-
-                    {/* Menu */}
-                    <div
-                        className="
-                            fixed
-                            right-4
-                            top-[78px]
-                            z-50
-                            w-[calc(100%-32px)]
-                            max-w-[360px]
-                            rounded-2xl
-                            border
-                            border-[#e5e1dc]
-                            bg-[#f7f4ef]
-                            p-3
-                            shadow-xl
-                            md:hidden
-                        "
-                    >
-
-                        <div className="flex flex-col gap-1">
-
-                            <MobileNavItem
-                                Icon="ri-home-5-line"
-                                Title="Dashboard"
-                                Link="/dashboard"
-                                closeMenu={closeMenu}
-                            />
-
-                            <MobileNavItem
-                                Icon="ri-arrow-left-right-line"
-                                Title="Transactions"
-                                Link="/dashboard/transactions"
-                                closeMenu={closeMenu}
-                            />
-
-                            <MobileNavItem
-                                Icon="ri-focus-3-line"
-                                Title="Budgets"
-                                Link="/dashboard/budgets"
-                                closeMenu={closeMenu}
-                            />
-
-                            <MobileNavItem
-                                Icon="ri-flag-line"
-                                Title="Goals"
-                                Link="/dashboard/goals"
-                                closeMenu={closeMenu}
-                            />
-
-                            <MobileNavItem
-                                Icon="ri-bar-chart-line"
-                                Title="Analytics"
-                                Link="/dashboard/analytics"
-                                closeMenu={closeMenu}
-                            />
-
-                            <MobileNavItem
-                                Icon="ri-calendar-line"
-                                Title="Recurring"
-                                Link="/dashboard/recurring"
-                                closeMenu={closeMenu}
-                            />
-
-                            <MobileNavItem
-                                Icon="ri-file-chart-line"
-                                Title="Reports"
-                                Link="/dashboard/reports"
-                                closeMenu={closeMenu}
-                            />
-
-                            <MobileNavItem
-                                Icon="ri-settings-3-line"
-                                Title="Settings"
-                                Link="/dashboard/settings"
-                                closeMenu={closeMenu}
-                            />
-
-                        </div>
-
-                    </div>
-                </>
-            )}
-
-        </>
-    );
-}
-
-
-/* ================================================= */
-/* DESKTOP NAV ITEM */
-/* ================================================= */
-
-function NavItem({ Icon, Title, Link }) {
-
-    return (
-        <NavLink
-            to={Link}
-            className={({ isActive }) => `
-                flex
-                w-full
-                items-center
-                gap-4
-                rounded-xl
-                px-4
-                py-3
-                text-left
-                transition
-                duration-200
-
-                ${
-                    isActive
-                        ? "bg-[#203854] text-white"
-                        : "text-[#d9e2ec] hover:bg-[#1d334d] hover:text-white"
-                }
-            `}
-        >
-
-            <i className={`${Icon} text-[20px]`}></i>
-
-            <span className="text-[15px] font-medium">
-                {Title}
-            </span>
-
-        </NavLink>
-    );
-}
-
-
-/* ================================================= */
-/* MOBILE NAV ITEM */
-/* ================================================= */
-
-function MobileNavItem({
-    Icon,
-    Title,
-    Link,
-    closeMenu
-}) {
-
-    return (
-        <NavLink
-            to={Link}
-            onClick={closeMenu}
-        >
-            {({ isActive }) => (
-
-                <div
-                    className={`
-                        flex
-                        w-full
-                        items-center
-                        gap-4
-                        rounded-xl
-                        px-4
-                        py-3
-                        transition
-                        duration-200
-
-                        ${
-                            isActive
-                                ? "bg-[#203854] text-white"
-                                : "text-[#172033] hover:bg-[#ebe7e1]"
-                        }
-                    `}
-                >
-
-                    {/* Icon */}
-                    <div
-                        className={`
-                            flex
-                            h-9
-                            w-9
-                            shrink-0
-                            items-center
-                            justify-center
-                            rounded-lg
-
-                            ${
-                                isActive
-                                    ? "bg-white/15"
-                                    : "bg-[#e9e4dd]"
-                            }
-                        `}
-                    >
-
-                        <i className={`${Icon} text-lg`}></i>
-
-                    </div>
-
-
-                    {/* Title */}
-                    <span className="text-sm font-medium">
-                        {Title}
-                    </span>
 
                 </div>
 
             )}
-        </NavLink>
+
+        </>
+
     );
+
+}
+
+
+/* =========================================================
+   PROFILE MENU ITEM
+========================================================= */
+
+function ProfileMenuItem({
+    icon,
+    label,
+    onClick,
+}) {
+
+    return (
+
+        <button
+            type="button"
+            onClick={onClick}
+            className="
+                flex
+                w-full
+                items-center
+                gap-3
+                rounded-xl
+                px-3
+                py-3
+                text-left
+                transition
+                hover:bg-[#20354b]
+            "
+        >
+
+            <i className={`
+                ${icon}
+                text-lg
+                text-[#9db5d0]
+            `}></i>
+
+            <span className="
+                text-sm
+                font-medium
+                text-[#d9e2ed]
+            ">
+                {label}
+            </span>
+
+        </button>
+
+    );
+
+}
+
+
+/* =========================================================
+   DESKTOP NAV ITEM
+========================================================= */
+
+function NavItem({
+    to,
+    icon,
+    label,
+}) {
+
+    return (
+
+        <NavLink
+            to={to}
+            end={to === "/dashboard"}
+            className={({ isActive }) =>
+                `
+                mb-1
+                flex
+                items-center
+                gap-3
+                rounded-xl
+                px-4
+                py-3.5
+                text-sm
+                font-medium
+                transition-all
+                duration-200
+                ${
+                    isActive
+                        ? "bg-[#243b55] text-white shadow-[inset_3px_0_0_#7da2d1]"
+                        : "text-[#b9c8d8] hover:bg-[#1b2c42] hover:text-white"
+                }
+                `
+            }
+        >
+
+            <i
+                className={`
+                    ${icon}
+                    text-xl
+                    ${
+                        "text-[#c7d5e5]"
+                    }
+                `}
+            ></i>
+
+            <span>
+                {label}
+            </span>
+
+        </NavLink>
+
+    );
+
+}
+
+
+/* =========================================================
+   MOBILE NAV ITEM
+========================================================= */
+
+function MobileNavItem({
+    to,
+    icon,
+    label,
+    onClick,
+}) {
+
+    return (
+
+        <NavLink
+            to={to}
+            end={to === "/dashboard"}
+            onClick={onClick}
+            className={({ isActive }) =>
+                `
+                flex
+                items-center
+                gap-3
+                rounded-xl
+                px-4
+                py-3.5
+                text-sm
+                font-medium
+                transition
+                ${
+                    isActive
+                        ? "bg-[#243b55] text-white"
+                        : "text-[#b9c8d8] hover:bg-[#1b2c42] hover:text-white"
+                }
+                `
+            }
+        >
+
+            <i className={`${icon} text-xl`}></i>
+
+            <span>
+                {label}
+            </span>
+
+        </NavLink>
+
+    );
+
 }
 
 

@@ -1,4 +1,5 @@
 import Navbar from "../../Components/Dashboard/Navbar.jsx";
+import Top from "../../Components/Dashboard/Top.jsx";
 
 function Goals() {
 
@@ -11,22 +12,17 @@ function Goals() {
             <main
                 className="
                     w-full
-                    md:ml-[240px]
-                    md:w-[calc(100%-240px)]
+                    lg:ml-60
+                    lg:w-[calc(100%-240px)]
                 "
             >
+                <Top
+                    Icon="ri-flag-line"
+                    Tittle="Goals"
+                    Description="Set your goals, stay consistent, and build the future you want"
+                />
 
-                <div className="p-5 pt-6 md:p-8">
-
-                    <h1 className="text-3xl font-bold text-[#172033]">
-                        Goals
-                    </h1>
-
-                    <p className="mt-2 text-[#6b7280]">
-                        Set, track, and achieve your financial goals.
-                    </p>
-
-                </div>
+                
 
             </main>
 

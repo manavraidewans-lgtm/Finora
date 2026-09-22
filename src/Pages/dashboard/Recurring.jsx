@@ -1,4 +1,5 @@
 import Navbar from "../../Components/Dashboard/Navbar.jsx";
+import Top from "../../Components/Dashboard/Top.jsx";
 
 function Recurring() {
 
@@ -11,22 +12,17 @@ function Recurring() {
             <main
                 className="
                     w-full
-                    md:ml-[240px]
-                    md:w-[calc(100%-240px)]
+                    lg:ml-60
+                    lg:w-[calc(100%-240px)]
                 "
             >
+                <Top
+                    Icon="ri-calendar-2-line"
+                    Tittle="Recurring"
+                    Description="Get detailed insights into your income, expenses and spending habbits"
+                />
 
-                <div className="p-5 pt-6 md:p-8">
-
-                    <h1 className="text-3xl font-bold text-[#172033]">
-                        Recurring
-                    </h1>
-
-                    <p className="mt-2 text-[#6b7280]">
-                        Manage your recurring income and expenses.
-                    </p>
-
-                </div>
+                
 
             </main>
 

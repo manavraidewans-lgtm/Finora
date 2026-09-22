@@ -1,4 +1,5 @@
 import Navbar from "../../Components/Dashboard/Navbar.jsx";
+import Top from "../../Components/Dashboard/Top.jsx";
 
 function Budgets() {
 
@@ -11,22 +12,17 @@ function Budgets() {
             <main
                 className="
                     w-full
-                    md:ml-[240px]
-                    md:w-[calc(100%-240px)]
+                    lg:ml-[240px]
+                    lg:w-[calc(100%-240px)]
                 "
             >
+                <Top
+                    Icon="ri-crosshair-2-line"
+                    Tittle="Budget"
+                    Description="Set limlis, stay on track and achieve your financial goals"
+                />
 
-                <div className="p-5 pt-6 md:p-8">
-
-                    <h1 className="text-3xl font-bold text-[#172033]">
-                        Budgets
-                    </h1>
-
-                    <p className="mt-2 text-[#6b7280]">
-                        Create and manage your monthly budgets.
-                    </p>
-
-                </div>
+                
 
             </main>
 

@@ -1,4 +1,5 @@
 import Navbar from "../../Components/Dashboard/Navbar.jsx";
+import Top from "../../Components/Dashboard/Top.jsx";
 
 function Reports() {
 
@@ -8,25 +9,18 @@ function Reports() {
 
             <Navbar />
 
-            <main
-                className="
-                    w-full
-                    md:ml-[240px]
-                    md:w-[calc(100%-240px)]
-                "
-            >
+            <main className=" w-full lg:ml-60 lg:w-[calc(100%-240px)]">
 
-                <div className="p-5 pt-6 md:p-8">
+                <Top
+                    Icon="ri-file-chart-fill"
+                    Tittle="Reports"
+                    Description="Get detailed insights into your income, expenses and spending reports"
+                />
 
-                    <h1 className="text-3xl font-bold text-[#172033]">
-                        Reports
-                    </h1>
 
-                    <p className="mt-2 text-[#6b7280]">
-                        Generate and view your financial reports.
-                    </p>
+                
 
-                </div>
+                
 
             </main>
 

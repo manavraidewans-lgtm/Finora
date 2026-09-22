@@ -1,4 +1,5 @@
 import Navbar from "../../Components/Dashboard/Navbar.jsx";
+import Top from "../../Components/Dashboard/Top.jsx";
 
 function Transactions() {
 
@@ -11,22 +12,17 @@ function Transactions() {
             <main
                 className="
                     w-full
-                    md:ml-[240px]
-                    md:w-[calc(100%-240px)]
+                    lg:ml-[240px]
+                    lg:w-[calc(100%-240px)]
                 "
             >
+                <Top
+                    Icon="ri-arrow-left-right-fill"
+                    Tittle="Transactions"
+                    Description="Track your income and expenses, stay in control of your money"
+                />
 
-                <div className="p-5 pt-6 md:p-8">
-
-                    <h1 className="text-3xl font-bold text-[#172033]">
-                        Transactions
-                    </h1>
-
-                    <p className="mt-2 text-[#6b7280]">
-                        View and manage all your transactions.
-                    </p>
-
-                </div>
+                
 
             </main>
 
