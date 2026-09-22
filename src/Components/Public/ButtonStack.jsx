@@ -1,21 +1,25 @@
 
-import Button from "./Button";
+import { Link } from "react-router-dom";
 
 function ButtonStack() {
     return (
-        <div className="h-[30%] md:h-[20%] lg:h-[15%] w-full p-2 flex justify-start items-center gap-8 md:gap-16 lg:gap-24">
+        <div className="flex flex-wrap gap-3">
 
-            <Button
-                BackgroundColor="bg-[#967056]"
-                Text="Try Your Spending"
-                className="text-[#e9d3c6] font-bold"
-            />
+            {/* Try Your Spending */}
+            <Link
+                to="/dashboard"
+                className="px-6 py-3 rounded-full bg-[#967056] text-white font-medium hover:bg-[#896b57] transition-all duration-300"
+            >
+                Try Your Spending
+            </Link>
 
-            <Button
-                BackgroundColor="bg-[#f7f4ef]"
-                Text="Explore Features"
-                className="text-[#887971] font-bold"
-            />
+            {/* Explore Features */}
+            <Link
+                to="/features"
+                className="px-6 py-3 rounded-full border border-[#896b57] text-[#896b57] font-medium hover:bg-[#896b57] hover:text-white transition-all duration-300"
+            >
+                Explore Features
+            </Link>
 
         </div>
     );
