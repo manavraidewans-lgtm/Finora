@@ -1,5 +1,6 @@
 import First from "../../Components/Dashboard/Home/First.jsx";
 import Second from "../../Components/Dashboard/Home/Second.jsx";
+import Third from "../../Components/Dashboard/Home/Third.jsx";
 import Navbar from "../../Components/Dashboard/Navbar.jsx";
 import Top from "../../Components/Dashboard/Top.jsx";
 
@@ -21,10 +22,11 @@ function Dashboard() {
 
 
                 <First/>
-                
+
 
                 <Second/>
 
+                <Third/>
                 
 
             </main>
