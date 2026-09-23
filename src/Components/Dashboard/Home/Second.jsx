@@ -1,3 +1,10 @@
+import Card from "../Card";
+import DashboardGoals from "./DashboardGoals";
+import DashboardRecentTransactions from "./DashboardRecentTransactions";
+import IncomeExpenseChart from "./IncomeExpenseChart";
+import QuickAction from "./QuickAction";
+import SpendingOverview from "./SpendingOverview";
+
 export default function Second() {
     return (
         <div className="
@@ -5,122 +12,165 @@ export default function Second() {
             min-h-screen
             w-full
             flex-col
-            gap-3
+            gap-2
             p-4
             pl-8
+            items-center
+
             md:grid
-            md:grid-cols-[65%_30%]
+            md:grid-cols-1
             md:gap-4
+            md:items-start
+
+            lg:grid-cols-[7fr_3fr]
+            lg:gap-4
         ">
 
             {/* ================= CARDS ================= */}
 
             <div className="
-                flex
-                h-[65vh]
+                grid
+                h-[55vh]
                 w-full
+                grid-cols-2
                 items-center
-                justify-center
-                bg-purple-300
+                justify-items-center
+                gap-2
+                p-2
 
+                md:flex
                 md:h-[25vh]
+                md:w-full
+                md:flex-row
+                md:items-center
+                md:justify-evenly
+
+                lg:col-span-1
+                lg:h-[25vh]
+                lg:self-center
             ">
-                <h1>Cards</h1>
+
+                <Card
+                    Icon="ri-wallet-3-line"
+                    Tittle="Total Balance"
+                    Amount="₹42,360"
+                    value="+16%"
+                    Description="from last month"
+                />
+
+                <Card
+                    Icon="ri-arrow-up-line"
+                    Tittle="Total Income"
+                    Amount="₹70,000"
+                    value="+8%"
+                    Description="from last month"
+                />
+
+                <Card
+                    Icon="ri-arrow-down-line"
+                    Tittle="Total Expenses"
+                    Amount="₹32,450"
+                    value="-5%"
+                    Description="from last month"
+                />
+
+                <Card
+                    Icon="ri-piggy-bank-line"
+                    Tittle="Savings"
+                    Amount="₹37,550"
+                    value="+15%"
+                    Description="from last month"
+                />
+
             </div>
 
 
-            {/* ================= QUICK ACTIONS ================= */}
+            {/* ================= QUICK ACTION ================= */}
 
             <div className="
-                flex
-                h-[25vh]
                 w-full
-                items-center
-                justify-center
-                bg-purple-100
 
-                md:h-[25vh]
+                lg:col-span-1
             ">
-                <h1>Quick Actions</h1>
+                <QuickAction />
             </div>
 
 
-            {/* ================= SECOND LINE ================= */}
+            {/* ================= CHARTS ================= */}
 
             <div className="
                 flex
                 w-full
+                min-w-0
                 flex-col
                 gap-4
 
-                md:col-span-2
-                md:flex-row
+                md:flex-col
+
+                lg:col-span-2
+                lg:flex-row
             ">
 
-                {/* ================= PIE CHART ================= */}
+                {/* PIE CHART */}
 
                 <div className="
-                    flex
-                    h-[35vh]
+                    min-w-0
                     w-full
-                    items-center
-                    justify-center
-                    bg-blue-200
+                    overflow-hidden
 
-                    md:w-1/2
+                    lg:w-1/2
                 ">
-                    <h1>Pie Chart</h1>
+                    <SpendingOverview />
                 </div>
 
 
-                {/* ================= BAR GRAPH ================= */}
+                {/* INCOME & EXPENSE */}
 
                 <div className="
-                    flex
-                    h-[75vh]
+                    min-w-0
                     w-full
-                    items-center
-                    justify-center
-                    bg-pink-200
+                    overflow-hidden
 
-                    md:h-[35vh]
-                    md:w-1/2
+                    lg:w-1/2
                 ">
-                    <h1>Bar Graph</h1>
+                    <IncomeExpenseChart />
                 </div>
 
             </div>
 
 
-            {/* ================= RECENT ================= */}
+            {/* ================= RECENT + GOALS ================= */}
 
             <div className="
-                flex
-                h-[35vh]
+                grid
                 w-full
-                items-center
-                justify-center
-                bg-blue-200
+                grid-cols-1
+                gap-4
 
-                md:h-[30vh]
+                lg:col-span-2
+                lg:grid-cols-2
+                lg:items-stretch
             ">
-                <h1>Recent</h1>
-            </div>
+
+                <div className="
+                    flex
+                    h-full
+                    min-w-0
+                    w-full
+                ">
+                    <DashboardRecentTransactions />
+                </div>
 
 
-            {/* ================= GOALS ================= */}
+                <div className="
+                    flex
+                    h-full
+                    min-w-0
+                    w-full
+                ">
+                    <DashboardGoals />
+                </div>
 
-            <div className="
-                flex
-                h-[30vh]
-                w-full
-                items-center
-                justify-center
-                bg-red-700
-
-                md:h-[30vh]
-            ">
-                <h1>Goals</h1>
             </div>
 
         </div>
