@@ -4,7 +4,7 @@ import Navbar from "../../Components/Dashboard/Navbar.jsx";
 import Top from "../../Components/Dashboard/Top.jsx";
 
 import Details from "../../Components/Dashboard/Settings/ProfileSettings.jsx";
-import ProfileTop from "../../Components/Dashboard/ProfileTop.jsx";
+
 
 
 const defaultProfile = {
@@ -124,11 +124,6 @@ function Settings() {
 
 
             <main className="w-full lg:ml-60 lg:w-[calc(100%-240px)]">
-
-                <ProfileTop
-                    profile={profile}
-                />
-
 
                 <Top
                     Icon="ri-settings-3-line"
