@@ -16,7 +16,6 @@ import Budgets from "./Pages/dashboard/Budgets.jsx";
 import Goals from "./Pages/dashboard/Goals.jsx";
 import Analytics from "./Pages/dashboard/Analytics.jsx";
 import Recurring from "./Pages/dashboard/Recurring.jsx";
-import Reports from "./Pages/dashboard/Reports.jsx";
 import Settings from "./Pages/dashboard/Settings.jsx";
 
 // 404 error page
@@ -83,10 +82,7 @@ function App() {
                     element={<Recurring />}
                 />
 
-                <Route
-                    path="/dashboard/reports"
-                    element={<Reports />}
-                />
+            
 
                 <Route
                     path="/dashboard/settings"

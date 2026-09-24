@@ -284,11 +284,7 @@ function Navbar({ ClassName = "" }) {
                         label="Recurring"
                     />
 
-                    <NavItem
-                        to="/dashboard/reports"
-                        icon="ri-file-chart-line"
-                        label="Reports"
-                    />
+                    
 
                 </nav>
 
@@ -884,12 +880,7 @@ function Navbar({ ClassName = "" }) {
                             onClick={closeMenu}
                         />
 
-                        <MobileNavItem
-                            to="/dashboard/reports"
-                            icon="ri-file-chart-line"
-                            label="Reports"
-                            onClick={closeMenu}
-                        />
+                        
 
 
                         <div className="my-2 h-px bg-[#203044]"></div>
