@@ -1,49 +1,97 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function DashboardGoals() {
 
     const navigate = useNavigate();
 
+    const [goals, setGoals] = useState(() => {
 
-    // ================= DEFAULT GOALS =================
+        const savedGoals =
+            localStorage.getItem("finoraGoals");
 
-    const goals = [
-        {
-            title: "Travel to Japan",
-            saved: 45000,
-            target: 100000,
-            icon: "ri-flight-takeoff-line",
-            iconBg: "bg-[#f3f5f8]",
-            iconColor: "text-[#526277]",
-        },
-        {
-            title: "New Laptop",
-            saved: 60000,
-            target: 120000,
-            icon: "ri-computer-line",
-            iconBg: "bg-[#eefaf5]",
-            iconColor: "text-[#27343d]",
-        },
-        {
-            title: "Emergency Fund",
-            saved: 35000,
-            target: 50000,
-            icon: "ri-shield-check-line",
-            iconBg: "bg-[#fff5e8]",
-            iconColor: "text-[#d98516]",
-        },
-        {
-            title: "New Car",
-            saved: 180000,
-            target: 500000,
-            icon: "ri-car-line",
-            iconBg: "bg-[#f0ebff]",
-            iconColor: "text-[#7657e8]",
-        },
-    ];
+        if (!savedGoals) {
+            return [];
+        }
+
+        try {
+            return JSON.parse(savedGoals);
+        } catch (error) {
+            console.error(
+                "Goals loading error:",
+                error
+            );
+
+            return [];
+        }
+
+    });
 
 
-    // ================= MONEY FORMAT =================
+    // ================= SYNC =================
+
+    useEffect(() => {
+
+        const syncGoals = () => {
+
+            const savedGoals =
+                localStorage.getItem("finoraGoals");
+
+            if (!savedGoals) {
+
+                setGoals([]);
+
+                return;
+
+            }
+
+            try {
+
+                setGoals(
+                    JSON.parse(savedGoals)
+                );
+
+            } catch (error) {
+
+                console.error(
+                    "Dashboard goals sync error:",
+                    error
+                );
+
+            }
+
+        };
+
+
+        window.addEventListener(
+            "goalsUpdated",
+            syncGoals
+        );
+
+        window.addEventListener(
+            "storage",
+            syncGoals
+        );
+
+
+        return () => {
+
+            window.removeEventListener(
+                "goalsUpdated",
+                syncGoals
+            );
+
+            window.removeEventListener(
+                "storage",
+                syncGoals
+            );
+
+        };
+
+    }, []);
+
+
+    // ================= MONEY =================
 
     const formatMoney = (amount) => {
 
@@ -54,47 +102,67 @@ function DashboardGoals() {
                 currency: "INR",
                 maximumFractionDigits: 0,
             }
-        ).format(amount);
+        ).format(
+            Number(amount) || 0
+        );
+
+    };
+
+
+    // ================= PROGRESS =================
+
+    const getProgress = (goal) => {
+
+        if (!goal.target) {
+            return 0;
+        }
+
+        return Math.min(
+            (
+                Number(goal.saved || 0) /
+                Number(goal.target)
+            ) * 100,
+            100
+        );
 
     };
 
 
     return (
-        <div className="
-            flex
-            h-full
-            w-full
-            flex-col
-            rounded-2xl
-            border
-            border-[#e8e8e8]
-            bg-white
-            p-4
-            shadow-sm
 
-            sm:p-5
-            md:p-6
-            lg:p-7
-        ">
-
-            {/* ================= HEADER ================= */}
-
-            <div className="
+        <div
+            className="
                 flex
-                shrink-0
-                items-center
-                justify-between
-            ">
+                h-full
+                w-full
+                min-w-0
+                flex-col
+                overflow-hidden
+                rounded-2xl
+                border
+                border-[#e8e8e8]
+                bg-white
+                p-4
+                shadow-sm
+                sm:p-5
+            "
+        >
 
-                <h1 className="
-                    text-xl
-                    font-bold
-                    text-[#111827]
+            {/* HEADER */}
 
-                    md:text-2xl
-                ">
-                    Goals
-                </h1>
+            <div className="flex items-center justify-between gap-3">
+
+                <div className="min-w-0">
+
+                    <h2 className="text-base font-semibold text-[#111827] sm:text-lg">
+                        Goals
+                    </h2>
+
+                    <p className="mt-1 text-xs text-[#8b95a5] sm:text-sm">
+                        Track your financial goals
+                    </p>
+
+                </div>
 
 
                 <button
@@ -102,12 +170,12 @@ function DashboardGoals() {
                         navigate("/dashboard/goals")
                     }
                     className="
-                        text-sm
+                        shrink-0
+                        text-xs
                         font-medium
-                        text-[#4b91c9]
-                        transition
-                        duration-200
-                        hover:text-[#357bb1]
+                        text-[#896b57]
+                        hover:text-[#765844]
+                        sm:text-sm
                     "
                 >
                     View All
@@ -116,168 +184,227 @@ function DashboardGoals() {
             </div>
 
 
-            {/* ================= GOALS ================= */}
+            {/* GOALS */}
 
-            <div className="
-                mt-6
-                flex
-                flex-1
-                flex-col
-                justify-between
-                gap-6
-            ">
+            {goals.length === 0 ? (
 
-                {goals.map((goal, index) => {
+                <div
+                    className="
+                        flex
+                        flex-1
+                        flex-col
+                        items-center
+                        justify-center
+                        text-center
+                    "
+                >
 
-                    const percentage =
-                        Math.min(
-                            Math.round(
-                                (goal.saved /
-                                    goal.target) *
-                                    100
-                            ),
-                            100
-                        );
+                    <div
+                        className="
+                            flex
+                            h-12
+                            w-12
+                            items-center
+                            justify-center
+                            rounded-full
+                            bg-[#f3eee9]
+                            text-[#896b57]
+                        "
+                    >
+                        <i className="ri-flag-line text-xl"></i>
+                    </div>
+
+                    <h3 className="mt-3 text-sm font-semibold text-[#111827]">
+                        No goals yet
+                    </h3>
+
+                    <p className="mt-1 text-xs text-[#8b95a5]">
+                        Create a goal to start tracking your progress.
+                    </p>
+
+                    <button
+                        onClick={() =>
+                            navigate("/dashboard/goals")
+                        }
+                        className="
+                            mt-4
+                            rounded-lg
+                            bg-[#896b57]
+                            px-4
+                            py-2
+                            text-xs
+                            font-medium
+                            text-white
+                            hover:bg-[#765844]
+                        "
+                    >
+                        Create Goal
+                    </button>
+
+                </div>
+
+            ) : (
+
+                <div
+                    className="
+                        mt-5
+                        flex
+                        flex-1
+                        flex-col
+                        gap-5
+                        overflow-y-auto
+                        pr-1
+                    "
+                >
+
+                    {goals
+                        .slice(0, 4)
+                        .map((goal) => {
+
+                            const progress =
+                                getProgress(goal);
+
+                            return (
+
+                                <div
+                                    key={goal.id}
+                                    className="w-full"
+                                >
+
+                                    <div
+                                        className="
+                                            flex
+                                            items-center
+                                            justify-between
+                                            gap-3
+                                        "
+                                    >
+
+                                        <div
+                                            className="
+                                                flex
+                                                min-w-0
+                                                items-center
+                                                gap-2
+                                            "
+                                        >
+
+                                            <div
+                                                className="
+                                                    flex
+                                                    h-8
+                                                    w-8
+                                                    shrink-0
+                                                    items-center
+                                                    justify-center
+                                                    rounded-full
+                                                    bg-[#f3eee9]
+                                                    text-[#896b57]
+                                                "
+                                            >
+                                                <i className="ri-flag-line text-sm"></i>
+                                            </div>
 
 
-                    return (
+                                            <span
+                                                className="
+                                                    min-w-0
+                                                    truncate
+                                                    text-sm
+                                                    font-medium
+                                                    text-[#4b4d4d]
+                                                "
+                                            >
+                                                {goal.name}
+                                            </span>
 
-                        <div
-                            key={index}
-                            className="
-                                flex
-                                min-w-0
-                                items-start
-                                gap-3
-                            "
-                        >
-
-                            {/* ================= ICON ================= */}
-
-                            <div
-                                className={`
-                                    flex
-                                    h-12
-                                    w-12
-                                    shrink-0
-                                    items-center
-                                    justify-center
-                                    rounded-full
-                                    text-xl
-
-                                    sm:h-14
-                                    sm:w-14
-                                    sm:text-2xl
-
-                                    ${goal.iconBg}
-                                    ${goal.iconColor}
-                                `}
-                            >
-                                <i
-                                    className={goal.icon}
-                                ></i>
-                            </div>
+                                        </div>
 
 
-                            {/* ================= CONTENT ================= */}
+                                        <span
+                                            className="
+                                                shrink-0
+                                                text-xs
+                                                font-semibold
+                                                text-[#896b57]
+                                            "
+                                        >
+                                            {Math.round(progress)}%
+                                        </span>
 
-                            <div className="
-                                min-w-0
-                                flex-1
-                            ">
-
-                                {/* TITLE */}
-
-                                <h2 className="
-                                    truncate
-                                    text-sm
-                                    font-semibold
-                                    text-[#1f2937]
-
-                                    sm:text-base
-                                    md:text-lg
-                                ">
-                                    {goal.title}
-                                </h2>
+                                    </div>
 
 
-                                {/* AMOUNT */}
+                                    {/* PROGRESS */}
 
-                                <p className="
-                                    mt-1
-                                    text-xs
-                                    font-medium
-                                    text-[#8b95a5]
-
-                                    sm:text-sm
-                                    md:text-base
-                                ">
-                                    {formatMoney(goal.saved)}
-                                    {" / "}
-                                    {formatMoney(goal.target)}
-                                </p>
-
-
-                                {/* PROGRESS */}
-
-                                <div className="
-                                    mt-3
-                                    flex
-                                    items-center
-                                    gap-3
-                                ">
-
-                                    <div className="
-                                        h-2.5
-                                        min-w-0
-                                        flex-1
-                                        overflow-hidden
-                                        rounded-full
-                                        bg-[#e9eef3]
-                                    ">
+                                    <div
+                                        className="
+                                            mt-2
+                                            h-2
+                                            w-full
+                                            overflow-hidden
+                                            rounded-full
+                                            bg-[#eee9e4]
+                                        "
+                                    >
 
                                         <div
                                             className="
                                                 h-full
                                                 rounded-full
-                                                bg-[#43a7a7]
+                                                bg-[#896b57]
                                                 transition-all
                                                 duration-500
                                             "
                                             style={{
                                                 width:
-                                                    `${percentage}%`,
+                                                    `${progress}%`,
                                             }}
                                         />
 
                                     </div>
 
 
-                                    <span className="
-                                        shrink-0
-                                        text-xs
-                                        font-medium
-                                        text-[#374151]
+                                    {/* AMOUNT */}
 
-                                        sm:text-sm
-                                    ">
-                                        {percentage}%
-                                    </span>
+                                    <div
+                                        className="
+                                            mt-1
+                                            flex
+                                            justify-between
+                                            text-[11px]
+                                            text-[#8b95a5]
+                                        "
+                                    >
+
+                                        <span>
+                                            {formatMoney(
+                                                goal.saved
+                                            )}
+                                        </span>
+
+                                        <span>
+                                            {formatMoney(
+                                                goal.target
+                                            )}
+                                        </span>
+
+                                    </div>
 
                                 </div>
 
-                            </div>
+                            );
 
-                        </div>
+                        })}
 
-                    );
+                </div>
 
-                })}
-
-            </div>
+            )}
 
         </div>
+
     );
+
 }
 
 export default DashboardGoals;
