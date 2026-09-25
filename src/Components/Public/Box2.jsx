@@ -2,10 +2,13 @@ function Box2({ Icon, Tittle, Description }) {
     return (
         <div className="min-h-40 w-full bg-[#f7f4ef] p-4 md:p-5 flex flex-row items-start gap-4">
 
+
             {/* Icon */}
             <div className="shrink-0 text-3xl text-[#896b57] flex items-center justify-center rounded-[50%] bg-[#e4dad1] h-15 w-15 font-black ">
                 <i className={Icon}></i>
             </div>
+
+
 
             {/* Content */}
             <div className="flex flex-col  gap-1 md:gap-3 lg:gap-4">

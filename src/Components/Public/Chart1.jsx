@@ -3,15 +3,12 @@ import SpendingOverview from "./SpendingOverview";
 
 function Chart1() {
     return (
-        <section className="w-full h-full bg-[#f9f8f4] rounded-2xl border-2 border-[#f0ede8] p-2 flex flex-col gap-2 overflow-hidden">
+        <section className="flex h-full w-full flex-col gap-2 overflow-hidden rounded-2xl border-2 border-[#f0ede8] bg-[#f9f8f4] p-2">
 
-            {/* ========================= */}
+
             {/* SUMMARY BOXES */}
-            {/* ========================= */}
+            <div className="flex h-[35%] w-full items-center justify-center gap-2 md:gap-3 lg:h-[30%]">
 
-            <div className="w-full h-[35%] lg:h-[30%] flex justify-center items-center gap-2 md:gap-3">
-
-                {/* INCOME */}
                 <ExpenseBox
                     Heading="Income"
                     Money="₹ 1,24,000"
@@ -19,7 +16,6 @@ function Chart1() {
                     GrowthColor="text-green-600"
                 />
 
-                {/* EXPENSE */}
                 <ExpenseBox
                     Heading="Expense"
                     Money="₹ 86,400"
@@ -27,7 +23,6 @@ function Chart1() {
                     GrowthColor="text-green-600"
                 />
 
-                {/* SAVINGS */}
                 <ExpenseBox
                     Heading="Savings"
                     Money="₹ 52,320"
@@ -35,7 +30,6 @@ function Chart1() {
                     GrowthColor="text-red-500"
                 />
 
-                {/* BALANCE - LARGE SCREEN ONLY */}
                 <ExpenseBox
                     Heading="Balance"
                     Money="₹ 42,360"
@@ -47,14 +41,9 @@ function Chart1() {
             </div>
 
 
-            {/* ========================= */}
             {/* SPENDING OVERVIEW */}
-            {/* ========================= */}
-
-            <div className="w-full h-[65%] lg:h-[70%] min-h-0">
-
+            <div className="h-[65%] min-h-0 w-full lg:h-[70%]">
                 <SpendingOverview />
-
             </div>
 
         </section>

@@ -11,57 +11,36 @@ import {
 function MonthlyBarChart() {
 
     const data = [
-        {
-            month: "Apr",
-            spending: 38,
-        },
-        {
-            month: "May",
-            spending: 58,
-        },
-        {
-            month: "Jun",
-            spending: 52,
-        },
-        {
-            month: "Jul",
-            spending: 76,
-        },
-        {
-            month: "Aug",
-            spending: 92,
-        },
-        {
-            month: "Sep",
-            spending: 84,
-        },
+        { month: "Apr", spending: 38 },
+        { month: "May", spending: 58 },
+        { month: "Jun", spending: 52 },
+        { month: "Jul", spending: 76 },
+        { month: "Aug", spending: 92 },
+        { month: "Sep", spending: 84 },
     ];
 
     return (
-        <section className="w-full h-full bg-[#f0ede8] rounded-2xl p-3 md:p-4 flex flex-col overflow-hidden">
+        <section className="flex h-full w-full flex-col overflow-hidden rounded-2xl bg-[#f0ede8] p-3 md:p-4">
+
 
             {/* TITLE */}
             <div className="shrink-0">
-
-                <h2 className="text-sm md:text-base lg:text-lg font-semibold text-[#4b4d4d]">
+                <h2 className="text-sm font-semibold text-[#4b4d4d] md:text-base lg:text-lg">
                     Monthly Spending
                 </h2>
 
-                <p className="text-[10px] md:text-xs text-gray-500">
+                <p className="text-[10px] text-gray-500 md:text-xs">
                     Spending activity from April to September
                 </p>
-
             </div>
 
 
+
+
             {/* CHART */}
-            <div className="flex-1 min-h-0 w-full mt-2">
+            <div className="mt-2 min-h-0 w-full flex-1">
 
-                <ResponsiveContainer
-                    width="100%"
-                    height="100%"
-                >
-
+                <ResponsiveContainer width="100%" height="100%">
                     <BarChart
                         data={data}
                         margin={{
@@ -81,37 +60,21 @@ function MonthlyBarChart() {
 
                         <XAxis
                             dataKey="month"
-                            tick={{
-                                fontSize: 10,
-                                fill: "#6b6b6b",
-                            }}
+                            tick={{ fontSize: 10, fill: "#6b6b6b" }}
                             axisLine={false}
                             tickLine={false}
                         />
 
                         <YAxis
                             domain={[0, 100]}
-                            ticks={[
-                                0,
-                                20,
-                                40,
-                                60,
-                                80,
-                                100,
-                            ]}
-                            tick={{
-                                fontSize: 9,
-                                fill: "#6b6b6b",
-                            }}
+                            ticks={[0, 20, 40, 60, 80, 100]}
+                            tick={{ fontSize: 9, fill: "#6b6b6b" }}
                             axisLine={false}
                             tickLine={false}
                         />
 
                         <Tooltip
-                            formatter={(value) => [
-                                `${value}%`,
-                                "Spending",
-                            ]}
+                            formatter={(value) => [`${value}%`, "Spending"]}
                             contentStyle={{
                                 borderRadius: "10px",
                                 border: "1px solid #ded7d3",
@@ -129,7 +92,6 @@ function MonthlyBarChart() {
                         />
 
                     </BarChart>
-
                 </ResponsiveContainer>
 
             </div>

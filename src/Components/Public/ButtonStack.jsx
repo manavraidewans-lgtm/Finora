@@ -1,9 +1,9 @@
-
 import { Link } from "react-router-dom";
 
 function ButtonStack() {
     return (
         <div className="flex flex-wrap gap-3">
+
 
             {/* Try Your Spending */}
             <Link
@@ -12,6 +12,8 @@ function ButtonStack() {
             >
                 Try Your Spending
             </Link>
+
+
 
             {/* Explore Features */}
             <Link

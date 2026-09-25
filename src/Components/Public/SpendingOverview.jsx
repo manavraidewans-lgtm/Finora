@@ -9,31 +9,12 @@ import {
 function SpendingOverview() {
 
     const data = [
-        {
-            category: "Necessities",
-            amount: 18000,
-        },
-        {
-            category: "Transport",
-            amount: 10000,
-        },
-        {
-            category: "Shopping",
-            amount: 12000,
-        },
-        {
-            category: "Bills",
-            amount: 14000,
-        },
-        {
-            category: "Luxury",
-            amount: 14000,
-        },
-        {
-            category: "Investment",
-            amount: 18400,
-        },
-        
+        { category: "Necessities", amount: 18000 },
+        { category: "Transport", amount: 10000 },
+        { category: "Shopping", amount: 12000 },
+        { category: "Bills", amount: 14000 },
+        { category: "Luxury", amount: 14000 },
+        { category: "Investment", amount: 18400 },
     ];
 
     const COLORS = [
@@ -44,39 +25,35 @@ function SpendingOverview() {
         "#9A9A9A",
     ];
 
-    const total = data.reduce(
-        (sum, item) => sum + item.amount,
-        0
-    );
+    const total = data.reduce((sum, item) => sum + item.amount, 0);
 
     return (
-        <section className="w-full h-full bg-[#f0ede8] rounded-2xl p-3 md:p-4 flex flex-col overflow-hidden">
+        <section className="flex h-full w-full flex-col overflow-hidden rounded-2xl bg-[#f0ede8] p-3 md:p-4">
+
+
 
             {/* TITLE */}
             <div className="shrink-0">
-
-                <h2 className="text-sm md:text-base lg:text-lg font-semibold text-[#4b4d4d]">
+                <h2 className="text-sm font-semibold text-[#4b4d4d] md:text-base lg:text-lg">
                     Spending Overview
                 </h2>
 
-                <p className="text-[10px] md:text-xs text-gray-500">
+                <p className="text-[10px] text-gray-500 md:text-xs">
                     Where your money went this month
                 </p>
-
             </div>
 
 
+
+
             {/* CHART + DETAILS */}
-            <div className="w-full flex-1 min-h-0 flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4">
+            <div className="flex min-h-0 w-full flex-1 flex-col items-center justify-center gap-2 sm:flex-row sm:gap-4">
+
 
                 {/* PIE CHART */}
-                <div className="w-full sm:w-1/2 h-[180px] sm:h-full min-h-0 relative">
+                <div className="relative h-45 min-h-0 w-full sm:h-full sm:w-1/2">
 
-                    <ResponsiveContainer
-                        width="100%"
-                        height="100%"
-                    >
-
+                    <ResponsiveContainer width="100%" height="100%">
                         <PieChart>
 
                             <Pie
@@ -91,18 +68,12 @@ function SpendingOverview() {
                                 cornerRadius={5}
                                 stroke="none"
                             >
-
                                 {data.map((item, index) => (
                                     <Cell
                                         key={`cell-${index}`}
-                                        fill={
-                                            COLORS[
-                                                index % COLORS.length
-                                            ]
-                                        }
+                                        fill={COLORS[index % COLORS.length]}
                                     />
                                 ))}
-
                             </Pie>
 
                             <Tooltip
@@ -119,35 +90,33 @@ function SpendingOverview() {
                             />
 
                         </PieChart>
-
                     </ResponsiveContainer>
 
 
-                    {/* CENTER TOTAL */}
-                    <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
 
-                        <span className="text-[9px] md:text-[10px] text-gray-500">
+
+                    {/* CENTER TOTAL */}
+                    <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
+                        <span className="text-[9px] text-gray-500 md:text-[10px]">
                             Total
                         </span>
 
-                        <span className="text-base md:text-lg lg:text-xl font-semibold text-[#4b4d4d]">
+                        <span className="text-base font-semibold text-[#4b4d4d] md:text-lg lg:text-xl">
                             ₹{total.toLocaleString("en-IN")}
                         </span>
-
                     </div>
 
                 </div>
 
 
+
+
                 {/* DETAILS */}
-                <div className="w-full sm:w-1/2 flex flex-col gap-1.5 md:gap-2">
+                <div className="flex w-full flex-col gap-1.5 sm:w-1/2 md:gap-2">
 
                     {data.map((item, index) => {
 
-                        const percentage = (
-                            (item.amount / total) *
-                            100
-                        ).toFixed(0);
+                        const percentage = ((item.amount / total) * 100).toFixed(0);
 
                         return (
                             <div
@@ -158,17 +127,14 @@ function SpendingOverview() {
                                 <div className="flex items-center gap-2">
 
                                     <span
-                                        className="w-2 h-2 rounded-full shrink-0"
+                                        className="h-2 w-2 shrink-0 rounded-full"
                                         style={{
                                             backgroundColor:
-                                                COLORS[
-                                                    index %
-                                                    COLORS.length
-                                                ],
+                                                COLORS[index % COLORS.length],
                                         }}
                                     />
 
-                                    <span className="text-[10px] md:text-xs text-[#4b4d4d]">
+                                    <span className="text-[10px] text-[#4b4d4d] md:text-xs">
                                         {item.category}
                                     </span>
 
@@ -176,11 +142,11 @@ function SpendingOverview() {
 
                                 <div className="flex items-center gap-2">
 
-                                    <span className="text-[10px] md:text-xs font-medium text-[#4b4d4d]">
+                                    <span className="text-[10px] font-medium text-[#4b4d4d] md:text-xs">
                                         ₹{item.amount.toLocaleString("en-IN")}
                                     </span>
 
-                                    <span className="text-[9px] text-gray-400 w-7 text-right">
+                                    <span className="w-7 text-right text-[9px] text-gray-400">
                                         {percentage}%
                                     </span>
 

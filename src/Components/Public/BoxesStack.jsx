@@ -1,4 +1,3 @@
-
 import Boxes from "./Boxes"
 
 function BoxesStack() {

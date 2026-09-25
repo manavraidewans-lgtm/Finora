@@ -1,56 +1,31 @@
 function BoxesStack4() {
-    const Boxes = [
-        {
-            Icon: "ri-shield-line",
-            Tittle: "Clarity",
-            Description: "See the bigger picture."
-        },
-        {
-            Icon: "ri-lock-line",
-            Tittle: "Privacy",
-            Description: "Your data, your control."
-        },
-        {
-            Icon: "ri-leaf-line",
-            Tittle: "Progress",
-            Description: "Small steps, big results."
-        },
-        {
-            Icon: "ri-star-line",
-            Tittle: "Simplicity",
-            Description: "Less complexity. More life."
-        }
+    const boxes = [
+        ["ri-shield-line", "Clarity", "See the bigger picture."],
+        ["ri-lock-line", "Privacy", "Your data, your control."],
+        ["ri-leaf-line", "Progress", "Small steps, big results."],
+        ["ri-star-line", "Simplicity", "Less complexity. More life."],
     ];
 
     return (
-        <div className="w-full grid grid-cols-2 md:grid-cols-4">
-
-            {Boxes.map((Box, index) => (
+        <div className="grid w-full grid-cols-2 md:grid-cols-4">
+            {boxes.map(([Icon, Tittle, Description], index) => (
                 <div
                     key={index}
-                    className="flex flex-col justify-center items-center text-center px-4 py-8 md:py-10 border-r border-[#ded7d3] last:border-r-0"
+                    className="flex flex-col items-center justify-center border-r border-[#ded7d3] px-4 py-8 text-center last:border-r-0 md:py-10"
                 >
+                    <i className={`${Icon} mb-4 text-4xl text-[#a38671] md:text-5xl`}></i>
 
-                    {/* Icon */}
-                    <i
-                        className={`${Box.Icon} text-4xl md:text-5xl text-[#a38671] mb-4`}
-                    ></i>
-
-                    {/* Title */}
-                    <h2 className="text-xl md:text-2xl font-semibold text-[#4b4d4d]">
-                        {Box.Tittle}
+                    <h2 className="text-xl font-semibold text-[#4b4d4d] md:text-2xl">
+                        {Tittle}
                     </h2>
 
-                    {/* Description */}
-                    <p className="mt-3 max-w-35 text-sm md:text-base font-medium leading-6 text-[#949494]">
-                        {Box.Description}
+                    <p className="mt-3 max-w-35 text-sm font-medium leading-6 text-[#949494] md:text-base">
+                        {Description}
                     </p>
-
                 </div>
             ))}
-
         </div>
     );
 }
 
-export default BoxesStack4
+export default BoxesStack4;
