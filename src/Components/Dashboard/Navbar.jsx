@@ -8,9 +8,7 @@ function Navbar({ ClassName = "" }) {
     const [profileOpen, setProfileOpen] = useState(false);
     const [popup, setPopup] = useState(null);
 
-
-
-    //  PROFILE 
+    // PROFILE
     const [profile, setProfile] = useState(() => {
         const saved = localStorage.getItem("finoraProfile");
 
@@ -33,10 +31,7 @@ function Navbar({ ClassName = "" }) {
         };
     });
 
-
-
-
-    //  PROFILE SYNC 
+    // PROFILE SYNC
     useEffect(() => {
         const updateProfile = () => {
             const saved = localStorage.getItem("finoraProfile");
@@ -59,10 +54,7 @@ function Navbar({ ClassName = "" }) {
         };
     }, []);
 
-
-
-
-    //  ACTIONS 
+    // ACTIONS
     const goTo = (path) => {
         setMenuOpen(false);
         setProfileOpen(false);
@@ -96,8 +88,7 @@ function Navbar({ ClassName = "" }) {
 
     return (
         <>
-
-            {/*  DESKTOP SIDEBAR  */}
+            {/* DESKTOP SIDEBAR */}
             <aside
                 className={`
                     fixed left-0 top-0 z-50 hidden h-screen w-64
@@ -105,7 +96,6 @@ function Navbar({ ClassName = "" }) {
                     lg:flex ${ClassName}
                 `}
             >
-
                 {/* LOGO */}
                 <div className="flex h-[12vh] items-center px-7">
                     <button
@@ -119,12 +109,36 @@ function Navbar({ ClassName = "" }) {
 
                 {/* NAVIGATION */}
                 <nav className="flex flex-1 flex-col px-4">
-                    <NavItem to="/dashboard" icon="ri-dashboard-line" label="Dashboard" />
-                    <NavItem to="/dashboard/transactions" icon="ri-exchange-dollar-line" label="Transactions" />
-                    <NavItem to="/dashboard/budgets" icon="ri-wallet-3-line" label="Budgets" />
-                    <NavItem to="/dashboard/goals" icon="ri-focus-3-line" label="Goals" />
-                    <NavItem to="/dashboard/analytics" icon="ri-bar-chart-box-line" label="Analytics" />
-                    <NavItem to="/dashboard/recurring" icon="ri-repeat-line" label="Recurring" />
+                    <NavItem
+                        to="/dashboard"
+                        icon="ri-dashboard-line"
+                        label="Dashboard"
+                    />
+                    <NavItem
+                        to="/dashboard/transactions"
+                        icon="ri-exchange-dollar-line"
+                        label="Transactions"
+                    />
+                    <NavItem
+                        to="/dashboard/budgets"
+                        icon="ri-wallet-3-line"
+                        label="Budgets"
+                    />
+                    <NavItem
+                        to="/dashboard/goals"
+                        icon="ri-focus-3-line"
+                        label="Goals"
+                    />
+                    <NavItem
+                        to="/dashboard/analytics"
+                        icon="ri-bar-chart-box-line"
+                        label="Analytics"
+                    />
+                    <NavItem
+                        to="/dashboard/recurring"
+                        icon="ri-repeat-line"
+                        label="Recurring"
+                    />
                 </nav>
 
                 {/* BOTTOM */}
@@ -142,6 +156,7 @@ function Navbar({ ClassName = "" }) {
 
                     {/* PROFILE */}
                     <div className="relative mt-2">
+
                         <button
                             type="button"
                             onClick={handleProfileClick}
@@ -169,13 +184,13 @@ function Navbar({ ClassName = "" }) {
                                 handleLogout={handleLogout}
                             />
                         )}
+
                     </div>
                 </div>
             </aside>
 
 
-            {/*  MOBILE NAVBAR  */}
-
+            {/* MOBILE NAVBAR */}
             <header
                 className={`
                     fixed left-0 top-0 z-50 flex h-[8vh] w-full
@@ -183,7 +198,6 @@ function Navbar({ ClassName = "" }) {
                     bg-[#101e2d] px-4 md:px-6 lg:hidden ${ClassName}
                 `}
             >
-
                 <button
                     type="button"
                     onClick={() => goTo("/dashboard")}
@@ -198,13 +212,9 @@ function Navbar({ ClassName = "" }) {
                     <button
                         type="button"
                         onClick={handleProfileClick}
-                        className="h-10 w-10 overflow-hidden rounded-full border border-[#34485e] bg-[#24364b]"
+                        className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border border-[#34485e] bg-[#24364b]"
                     >
-                        <img
-                            src={profile?.image || "/profile.jpg"}
-                            alt="Profile"
-                            className="h-full w-full object-cover"
-                        />
+                        <ProfileImage profile={profile} />
                     </button>
 
                     {/* MENU */}
@@ -213,8 +223,15 @@ function Navbar({ ClassName = "" }) {
                         onClick={() => setMenuOpen((prev) => !prev)}
                         className="flex h-10 w-10 items-center justify-center rounded-xl text-[#d5dfeb] transition hover:bg-[#1b2c42]"
                     >
-                        <i className={menuOpen ? "ri-close-line text-2xl" : "ri-menu-line text-2xl"}></i>
+                        <i
+                            className={
+                                menuOpen
+                                    ? "ri-close-line text-2xl"
+                                    : "ri-menu-line text-2xl"
+                            }
+                        ></i>
                     </button>
+
                 </div>
 
                 {/* MOBILE PROFILE POPUP */}
@@ -251,23 +268,59 @@ function Navbar({ ClassName = "" }) {
                         />
 
                         <LogoutButton handleLogout={handleLogout} />
+
                     </div>
                 )}
             </header>
 
 
-            {/*  MOBILE MENU  */}
-
+            {/* MOBILE MENU */}
             {menuOpen && (
                 <div className="fixed inset-x-0 top-[8vh] z-40 max-h-[92vh] overflow-y-auto border-b border-[#203044] bg-[#101e2d] p-4 shadow-[0_15px_35px_rgba(0,0,0,0.25)] lg:hidden">
 
                     <nav className="flex flex-col gap-1">
-                        <MobileNavItem to="/dashboard" icon="ri-dashboard-line" label="Dashboard" onClick={closeMenu} />
-                        <MobileNavItem to="/dashboard/transactions" icon="ri-exchange-dollar-line" label="Transactions" onClick={closeMenu} />
-                        <MobileNavItem to="/dashboard/budgets" icon="ri-wallet-3-line" label="Budgets" onClick={closeMenu} />
-                        <MobileNavItem to="/dashboard/goals" icon="ri-focus-3-line" label="Goals" onClick={closeMenu} />
-                        <MobileNavItem to="/dashboard/analytics" icon="ri-bar-chart-box-line" label="Analytics" onClick={closeMenu} />
-                        <MobileNavItem to="/dashboard/recurring" icon="ri-repeat-line" label="Recurring" onClick={closeMenu} />
+
+                        <MobileNavItem
+                            to="/dashboard"
+                            icon="ri-dashboard-line"
+                            label="Dashboard"
+                            onClick={closeMenu}
+                        />
+
+                        <MobileNavItem
+                            to="/dashboard/transactions"
+                            icon="ri-exchange-dollar-line"
+                            label="Transactions"
+                            onClick={closeMenu}
+                        />
+
+                        <MobileNavItem
+                            to="/dashboard/budgets"
+                            icon="ri-wallet-3-line"
+                            label="Budgets"
+                            onClick={closeMenu}
+                        />
+
+                        <MobileNavItem
+                            to="/dashboard/goals"
+                            icon="ri-focus-3-line"
+                            label="Goals"
+                            onClick={closeMenu}
+                        />
+
+                        <MobileNavItem
+                            to="/dashboard/analytics"
+                            icon="ri-bar-chart-box-line"
+                            label="Analytics"
+                            onClick={closeMenu}
+                        />
+
+                        <MobileNavItem
+                            to="/dashboard/recurring"
+                            icon="ri-repeat-line"
+                            label="Recurring"
+                            onClick={closeMenu}
+                        />
 
                         <div className="my-2 h-px bg-[#203044]"></div>
 
@@ -277,13 +330,14 @@ function Navbar({ ClassName = "" }) {
                             label="Settings"
                             onClick={closeMenu}
                         />
+
                     </nav>
+
                 </div>
             )}
 
 
-            {/*  PRIVACY / SECURITY MODAL  */}
-
+            {/* PRIVACY / SECURITY MODAL */}
             {popup && (
                 <div
                     className="fixed inset-0 z-100 flex items-center justify-center bg-black/40 px-4"
@@ -311,7 +365,9 @@ function Navbar({ ClassName = "" }) {
 
                                 <div>
                                     <h2 className="text-lg font-semibold text-[#3f4345]">
-                                        {popup === "privacy" ? "Privacy" : "Security"}
+                                        {popup === "privacy"
+                                            ? "Privacy"
+                                            : "Security"}
                                     </h2>
 
                                     <p className="text-xs text-[#8a918f]">
@@ -385,32 +441,41 @@ function Navbar({ ClassName = "" }) {
 }
 
 
-/*  PROFILE IMAGE  */
-
+/* PROFILE IMAGE */
 function ProfileImage({ profile, size = "normal" }) {
+    const [imageError, setImageError] = useState(false);
+
+    const sizeClass =
+        size === "large"
+            ? "h-11 w-11"
+            : "h-10 w-10";
+
+    const hasImage = profile?.image && !imageError;
+
     return (
         <div
-            className={
-                size === "large"
-                    ? "h-11 w-11 shrink-0 overflow-hidden rounded-full border border-[#34485e]"
-                    : "h-10 w-10 shrink-0 overflow-hidden rounded-full border border-[#34485e] bg-[#24364b]"
-            }
+            className={`${sizeClass} flex shrink-0 items-center justify-center overflow-hidden rounded-full border border-[#34485e] bg-[#24364b]`}
         >
-            <img
-                src={profile?.image || "/profile.jpg"}
-                alt="Profile"
-                className="h-full w-full object-cover"
-            />
+            {hasImage ? (
+                <img
+                    src={profile.image}
+                    alt="Profile"
+                    className="h-full w-full object-cover"
+                    onError={() => setImageError(true)}
+                />
+            ) : (
+                <i className="ri-user-line text-xl text-[#9db5d0]"></i>
+            )}
         </div>
     );
 }
 
 
-/*  PROFILE INFO  */
-
+/* PROFILE INFO */
 function ProfileInfo({ profile }) {
     return (
         <div className="min-w-0 flex-1">
+
             <p className="truncate text-sm font-semibold text-white">
                 {profile?.name || "Manav Rai Dewan"}
             </p>
@@ -418,13 +483,13 @@ function ProfileInfo({ profile }) {
             <p className="truncate text-xs text-[#91a3b8]">
                 {profile?.email || "manav.dewan@email.com"}
             </p>
+
         </div>
     );
 }
 
 
-/*  PROFILE MENU  */
-
+/* PROFILE MENU */
 function ProfileMenu({
     goTo,
     openPrivacy,
@@ -459,13 +524,13 @@ function ProfileMenu({
             />
 
             <LogoutButton handleLogout={handleLogout} />
+
         </div>
     );
 }
 
 
-/*  PROFILE MENU ITEM  */
-
+/* PROFILE MENU ITEM */
 function ProfileMenuItem({ icon, label, onClick }) {
     return (
         <button
@@ -474,6 +539,7 @@ function ProfileMenuItem({ icon, label, onClick }) {
             className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left transition hover:bg-[#20354b]"
         >
             <i className={`${icon} text-lg text-[#9db5d0]`}></i>
+
             <span className="text-sm font-medium text-[#d9e2ed]">
                 {label}
             </span>
@@ -482,8 +548,7 @@ function ProfileMenuItem({ icon, label, onClick }) {
 }
 
 
-// LOGOUT  
-
+/* LOGOUT */
 function LogoutButton({ handleLogout }) {
     return (
         <button
@@ -501,11 +566,11 @@ function LogoutButton({ handleLogout }) {
 }
 
 
-/*  INFO BOX  */
-
+/* INFO BOX */
 function InfoBox({ title, text, icon }) {
     return (
         <div className="rounded-xl border border-[#e7e3de] bg-white p-4">
+
             <div className="flex items-center justify-between">
 
                 <div>
@@ -519,14 +584,15 @@ function InfoBox({ title, text, icon }) {
                 </div>
 
                 <i className={`${icon} text-lg text-[#896b57]`}></i>
+
             </div>
+
         </div>
     );
 }
 
 
-/*  DESKTOP NAV ITEM  */
-
+/* DESKTOP NAV ITEM */
 function NavItem({ to, icon, label }) {
     return (
         <NavLink
@@ -549,8 +615,7 @@ function NavItem({ to, icon, label }) {
 }
 
 
-/*  MOBILE NAV ITEM  */
-
+/* MOBILE NAV ITEM */
 function MobileNavItem({ to, icon, label, onClick }) {
     return (
         <NavLink
